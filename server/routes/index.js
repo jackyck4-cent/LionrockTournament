@@ -9,4 +9,7 @@ router.get('/', indexController.home );
 /* First release listing page */
 router.get('/tournment', indexController.tournment );
 
+//Member with JWT
+router.get('/member', indexController.member );
+
 module.exports = router;

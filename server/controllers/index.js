@@ -9,3 +9,7 @@ module.exports.home = function(req, res, next) {
 module.exports.tournment = function(req, res, next) {
     res.render('tournment/dashboard', { title: 'Tournment listing' });
 }
+
+module.exports.member = function(req, res, next) {
+    res.render('member/main', { title: 'Member' });
+}

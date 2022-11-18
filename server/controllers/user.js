@@ -58,7 +58,7 @@ module.exports.login = function(req, res, next) {
             email: loggeduser.email,
             userId: loggeduser._id,
         },
-        'longer-secret-is-better',
+        DB.Secret,
         {
           expiresIn: '1h',
         },
@@ -81,7 +81,7 @@ module.exports.login = function(req, res, next) {
 
 module.exports.me = function(req, res, next) {
     const token = req.headers.authorization.split(" ")[1];
-    let userinfo = jwt.verify(token, "longer-secret-is-better" );
+    let userinfo = jwt.verify(token, DB.Secret );
 
     return res.status(200).json({
         status : 1,

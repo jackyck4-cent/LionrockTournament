@@ -45,7 +45,7 @@ app.use(cors());
 
 //setup express session
 app.use(session({
-  secret: DB.secret ,
+  secret: DB.Secret ,
   saveUninitialized: false,
   resave: false
 }));

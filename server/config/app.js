@@ -12,6 +12,9 @@ let passportJWT = require('passport-jwt');
 let JWTStrategy = passportJWT.Strategy;
 let ExtractJWT = passportJWT.ExtractJwt;
 
+let passportLocal = require('passport-local');
+let localStrategy = passportLocal.Strategy;
+console.log(localStrategy.usernameField );
 //db setup
 let mongoose = require("mongoose");
 let DB = require("./db")
@@ -54,20 +57,20 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-let User = require('../models/user');
-//let User = userModel.User;
+let userModel = require('../models/user');
+let User = userModel.User;
 
-//passport.use(User.createStrategy());
+passport.use(User.createStrategy());
 
-//passport.serializeUser(User.serializeUser());
-//passport.deserializeUser(User.deserializeUser());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 let jwtOptions = {};
 jwtOptions.jwtFromRequest = ExtractJWT.fromAuthHeaderAsBearerToken();
 jwtOptions.secretOrKey = DB.Secret;
 
 let strategy = new JWTStrategy(jwtOptions, (jwt_payload, done) => {
-  User.findById(jwt_payload.id)
+  User.findById(jwt_payload.userId)
     .then(user => {
       return done(null, user);
     })

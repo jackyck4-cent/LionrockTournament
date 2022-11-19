@@ -23,9 +23,9 @@ let userSchema = new Schema({
 }, {
     collection: 'users'
 })
-
+ 
 //userSchema.plugin(uniqueValidator, { message: 'Email already in use.' });
 let options = ({ missingPasswordError: 'Wrong / Missing Password' , usernameField: 'username' });
 userSchema.plugin(passportLocalMongoose, options);
 
-module.exports = mongoose.model('User', userSchema)
+module.exports.User = mongoose.model('User', userSchema)

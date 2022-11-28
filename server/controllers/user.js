@@ -21,6 +21,7 @@ module.exports.register = function(req, res, next) {
   User.register(user, req.body.password, (err) => {
     if(err)
     {
+      console.log(err)
       return res.json({success: 2, msg: 'Error'});
     }
     else
@@ -31,6 +32,16 @@ module.exports.register = function(req, res, next) {
     
 }
 
+module.exports.logout = function(req, res, next) {
+  req.logOut(
+    function(req)
+    {
+      res.redirect('/member');
+    }
+  );
+
+  
+}
 
 
 module.exports.login = function(req, res, next) {

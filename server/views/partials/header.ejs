@@ -13,8 +13,17 @@
             <div class="col-8">
                 <nav>
                     <a href="/"><i class="fa-solid fa-house"></i>Home</a>
+                   
                     <a href="/tournment"><i class="fa-solid fa-list"></i>Tournment</a>
-                    <a href="/member"><i class="fa-solid fa-user"></i>Member</a>
+                    
+                    
+
+                    <% if (loguser != null) { %>
+                      <a href="/profile"><i class="fa-solid fa-user"></i>Profile</a>
+                      <a href="/logout"><i class="fa-solid fa-user"></i>Logout</a>
+                    <% } else { %>
+                     <a href="/member"><i class="fa-solid fa-user"></i>Member</a>
+                    <% } %>
                 </nav>
             </div>
         </div>

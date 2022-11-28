@@ -35,7 +35,7 @@
             <button type="button" @click="saveform" class="btn btn-primary">
                 <i class="fa fa-check-square-o"></i> Login
               </button>
-              <a @click="page='register'" class="btn "
+              <a @click="initreg()" class="btn "
                 >Register</a>
 
                 <a @click="getme" v-if="token != ''" class="btn "
@@ -89,7 +89,7 @@
                     <button type="button" @click="register" class="btn btn-primary">
                         <i class="fa fa-check-square-o"></i> Register
                     </button>
-                    <a @click="page=''" class="btn ">back</a>
+                    <a @click="initlogin()" class="btn ">back</a>
                 </div>
             </form>
         </div>
@@ -125,11 +125,39 @@
       },
 
       methods: {
+
+        initreg : function() {
+          this.regobject = {
+            username : "",
+            displayname : "",
+            email : "",
+            password : ""
+          }
+
+          this.page='register';
+        },
+
+        initlogin : function() {
+          this.dataobject = {
+            username : "",
+            password : ""
+          }
+          this.page = "";
+        },
+
         register : function()
         {
             console.log(this.regobject);
             axios.post('/users/register' , this.regobject ).then(response => {
-                
+                if (response.data.status == 1 )
+                {
+                    alert("Registeration successfully");
+                    //this.page = ''
+                    this.initlogin();
+
+                }
+                else
+                    alert("User already exist");
             })
         },
 
@@ -154,7 +182,10 @@
                 if (response.data.status == 1 )
                 {
                     this.token = response.data.token;
+                    localStorage.setItem('atoken', this.token );
+
                     alert("Login successful");
+                    window.location.href = "/tournment";
                 }
                 else
                     alert("Password / incorrect");

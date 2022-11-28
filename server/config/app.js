@@ -14,7 +14,8 @@ let ExtractJWT = passportJWT.ExtractJwt;
 
 let passportLocal = require('passport-local');
 let localStrategy = passportLocal.Strategy;
-console.log(localStrategy.usernameField );
+
+
 //db setup
 let mongoose = require("mongoose");
 let DB = require("./db")
@@ -32,6 +33,12 @@ var tournmentRouter = require('../routes/tournment');
 var usersRouter = require('../routes/users');
 
 var app = express();
+
+app.use(session({
+  secret: DB.Secret,
+  resave: false ,
+  saveUninitialized: true ,
+}))
 
 // view engine setup
 app.set('views', path.join(__dirname, '../views'));

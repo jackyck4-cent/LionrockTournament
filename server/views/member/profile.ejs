@@ -1,0 +1,36 @@
+<%- include ../partials/header.ejs %>
+<main class="container dashboard" id="app">
+    <div class="row">
+        <div class="col-md-offset-1 col-md-10">
+          <h3>Profile </h3>
+
+               
+
+          <form class="form" method="post" v-if="page == '' ">
+            <div class="form-group">
+              <label for="NameTextField">Username</label>
+              <div><%=loguser.username %></div>
+            </div>
+            
+            <br />
+
+            <div class="form-group">
+                <label for="NameTextField">Display name</label>
+                <div><%=loguser.display_name %></div>
+              </div>
+              <br />
+              <div class="form-group">
+                <label for="NameTextField">Email</label>
+                <div><%=loguser.email %></div>
+              </div>
+
+         
+         
+          </form>
+          
+           
+        </div>
+    </div>
+</main>
+
+<%- include ../partials/footer.ejs %>

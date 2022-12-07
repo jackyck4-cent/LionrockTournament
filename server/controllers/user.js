@@ -18,18 +18,27 @@ module.exports.register = function(req, res, next) {
   //  password: hash,
   })
 
-  User.register(user, req.body.password, (err) => {
-    if(err)
-    {
-      console.log(err)
-      return res.json({success: 2, msg: 'Error'});
-    }
-    else
-    {
-      return res.json({status: 1, msg: 'User Registered Successfully!'});
-    }
-  });
-    
+  if (user.username != "" && user.display_name != "" && user.email != "" )
+  {
+    User.register(user, req.body.password, (err) => {
+      if(err)
+      {
+        console.log(err)
+        return res.json({status: 2, msg: 'User already exist'});
+      }
+      else
+      {
+        return res.json({status: 1, msg: 'User Registered Successfully!'});
+      }
+    });
+      
+  }
+  else
+  {
+    return res.json({status: 3, msg: 'Invalid Input'});
+  }
+
+  
 }
 
 module.exports.logout = function(req, res, next) {

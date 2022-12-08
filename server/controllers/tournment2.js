@@ -459,6 +459,39 @@ module.exports.create = function(req, res, next) {
   })  
 }
 
+module.exports.update = function(req, res, next) {
+
+  const token = req.headers.authorization.split(" ")[1];
+  let userinfo = jwt.verify(token, DB.Secret );
+  //console.log(userinfo);
+  let tnid = ((req.params.tnid))
+
+  Tournament.find({
+      'tn_id' : tnid
+  } ).then( ( items ) => {
+    
+    if ( items.length > 0 )
+    {
+      let entry = items[0];
+            
+      
+      entry.name = req.body.name;
+      entry.description = req.body.description;
+      entry.size = req.body.size;
+      entry.start_date = req.start_date;
+      entry.end_date = req.body.end_date;
+      entry.save();
+      
+      
+      
+      res.json({ status: 1 , data :  entry });   
+    }
+       
+  });
+
+ // res.json({ status: 1 , 'message' : 'OK' });
+}
+
 
 module.exports.register = function(req, res, next) {
 

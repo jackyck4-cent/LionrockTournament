@@ -6,6 +6,7 @@ let tournmentController = require("../controllers/tournment2");
 router.get("/", tournmentController.list);
 router.get("/players", tournmentController.playerlist);
 router.get("/fulllist", tournmentController.fulllist);
+router.get("/info/:id", tournmentController.info);
 
 router.get("/:id", tournmentController.get);
 router.post("/", tournmentController.add);

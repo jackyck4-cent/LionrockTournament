@@ -11,32 +11,47 @@ let DB = require("../config/db")
 
 module.exports.register = function(req, res, next) {
 
-  const user = new User({
-    username: req.body.username,
-    display_name : req.body.displayname,
-    email: req.body.email,
-  //  password: hash,
-  })
+  User.estimatedDocumentCount().then( (count) =>  {
+      
+      strCOunt = (count+1)+"";
+      for (var a=strCOunt.length;a<4;a++)
+        strCOunt = "0"+strCOunt;
+      strRefer = "a"+strCOunt;
+      console.log('Count is ' + strRefer);
 
-  if (user.username != "" && user.display_name != "" && user.email != "" )
-  {
-    User.register(user, req.body.password, (err) => {
-      if(err)
+      const user = new User({
+        username: req.body.username,
+        display_name : req.body.display_name,
+        email: req.body.email,
+        reference : strRefer,
+        role : 'user'
+      //  password: hash,
+      })
+    
+      console.log(user);
+      if (user.username != "" && user.display_name != "" && user.email != "" )
       {
-        console.log(err)
-        return res.json({status: 2, msg: 'User already exist'});
+        User.register(user, req.body.password, (err) => {
+          if(err)
+          {
+            console.log(err)
+            return res.json({status: 2, msg: 'User already exist'});
+          }
+          else
+          {
+            return res.json({status: 1, msg: 'User Registered Successfully!'});
+          }
+        });
+          
       }
       else
       {
-        return res.json({status: 1, msg: 'User Registered Successfully!'});
+        return res.json({status: 3, msg: 'Invalid Input'});
       }
     });
-      
-  }
-  else
-  {
-    return res.json({status: 3, msg: 'Invalid Input'});
-  }
+
+
+  
 
   
 }
@@ -81,6 +96,8 @@ module.exports.login = function(req, res, next) {
               display_name: user.display_name,
               email: user.email,
               userId: user._id,
+              user_id: user.reference,
+              role: user.role,
             }
 
             const authToken = jwt.sign(payload, DB.Secret, {
@@ -89,9 +106,11 @@ module.exports.login = function(req, res, next) {
             
             return res.json({status : 1 , success: true, msg: 'User Logged in Successfully!', user: {
                 id: user._id,
-                displayName: user.displayName,
+                display_name: user.display_name,
                 username: user.username,
-                email: user.email
+                email: user.email,
+                user_id: user.reference,
+              role: user.role,
             }, token: authToken});
 
            

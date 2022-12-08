@@ -15,7 +15,13 @@ let userSchema = new Schema({
         type: String,
         unique: true
     },
-    /*
+    reference: {
+        type: String
+    },
+    role: {
+        type: String
+    },
+    /* 
     password: {
         type: String
     }

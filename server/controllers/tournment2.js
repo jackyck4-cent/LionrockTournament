@@ -672,7 +672,34 @@ module.exports.winner = function(req, res, next) {
       let entry = items[0];
             
       //'_2'=final, '_4'=semi-final, '_8'=quarter-final, '_16'=round-of-16
-      entry.bouts = req.body.winners.bouts;
+      entry.bouts = req.body.winners.bouts;      
+      entry.save();
+      
+      
+      
+      res.json({ status: 1 , data :  entry });   
+    }
+       
+  });
+
+ // res.json({ status: 1 , 'message' : 'OK' });
+}
+
+module.exports.nextround = function(req, res, next) {
+
+  const token = req.headers.authorization.split(" ")[1];
+  let userinfo = jwt.verify(token, DB.Secret );
+  //console.log(userinfo);
+  let tnid = ((req.params.tnid))
+
+  Tournament.find({
+      'tn_id' : tnid
+  } ).then( ( items ) => {
+    
+    if ( items.length > 0 )
+    {
+      let entry = items[0];
+
       if (entry.current_round == "_2")
       { 
         //entry.status = "completed" ;
@@ -709,33 +736,6 @@ module.exports.winner = function(req, res, next) {
         entry.bouts["_8"][3][0] = entry.bouts["_8"][6][2];
         entry.bouts["_8"][3][1] = entry.bouts["_8"][7][2];
       }
-      
-      entry.save();
-      
-      
-      
-      res.json({ status: 1 , data :  entry });   
-    }
-       
-  });
-
- // res.json({ status: 1 , 'message' : 'OK' });
-}
-
-module.exports.nextround = function(req, res, next) {
-
-  const token = req.headers.authorization.split(" ")[1];
-  let userinfo = jwt.verify(token, DB.Secret );
-  //console.log(userinfo);
-  let tnid = ((req.params.tnid))
-
-  Tournament.find({
-      'tn_id' : tnid
-  } ).then( ( items ) => {
-    
-    if ( items.length > 0 )
-    {
-      let entry = items[0];
             
       if (entry.current_round == "_2")
       { 

@@ -385,7 +385,9 @@ module.exports.fulllist = function(req, res, next) {
 
     items.players = players;
 
-    Tournament.find().sort({name:1}).then( ( games ) => {
+    Tournament.find(
+      { status: { $ne: "removed" } }
+    ).sort({name:1}).then( ( games ) => {
 
       tournaments = {};
       for (var a=0;a<games.length;a++)
@@ -571,6 +573,31 @@ module.exports.enroll = function(req, res, next) {
  // res.json({ status: 1 , 'message' : 'OK' });
 }
 
+module.exports.remove = function(req, res, next) {
+
+  const token = req.headers.authorization.split(" ")[1];
+  let userinfo = jwt.verify(token, DB.Secret );
+  //console.log(userinfo);
+  let tnid = ((req.params.tnid))
+
+  Tournament.find({
+      'tn_id' : tnid
+  } ).then( ( items ) => {
+    
+    if ( items.length > 0 )
+    {
+      let entry = items[0];
+            
+      entry.status = "removed";
+      entry.save();
+      res.json({ status: 1 , data :  entry });   
+    }
+       
+  });
+
+ // res.json({ status: 1 , 'message' : 'OK' });
+}
+
 module.exports.start = function(req, res, next) {
 
   const token = req.headers.authorization.split(" ")[1];
@@ -737,6 +764,7 @@ module.exports.nextround = function(req, res, next) {
         entry.bouts["_8"][3][1] = entry.bouts["_8"][7][2];
       }
             
+      console.log("Current r="+entry.current_round);
       if (entry.current_round == "_2")
       { 
         //entry.status = "completed" ;

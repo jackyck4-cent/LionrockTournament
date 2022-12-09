@@ -15,6 +15,7 @@ router.post("/update/:tnid", passport.authenticate('jwt', {session: false}) , to
 
 router.get("/register/:tnid", passport.authenticate('jwt', {session: false}) , tournmentController.register);
 router.get("/enroll/:tnid", passport.authenticate('jwt', {session: false}) , tournmentController.enroll);
+router.get("/remove/:tnid", passport.authenticate('jwt', {session: false}) , tournmentController.remove);
 router.get("/start/:tnid", passport.authenticate('jwt', {session: false}) , tournmentController.start);
 router.post("/winner/:tnid", passport.authenticate('jwt', {session: false}) , tournmentController.winner);
 router.get("/nextround/:tnid", passport.authenticate('jwt', {session: false}) , tournmentController.nextround);

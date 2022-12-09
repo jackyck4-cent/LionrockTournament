@@ -584,6 +584,7 @@ module.exports.start = function(req, res, next) {
     
     if ( items.length > 0 )
     {
+      tree = [];
       let entry = items[0];
       //'_2'=final, '_4'=semi-final, '_8'=quarter-final, '_16'=round-of-16
       let col = "";
@@ -631,13 +632,14 @@ module.exports.start = function(req, res, next) {
           ['', '', ''],
         ],
       };
-      entry.bouts[col] = tree;
+      
 
-      tree = [];
+      
       for (var a=0;a<Math.ceil(entry.players / 2);a++)
       {
         tree[a] = [ entry.players[a * 2 ], entry.players[a * 2  + 1 ], ''];
       }
+      entry.bouts[col] = tree;
       //bouts: 
 
 

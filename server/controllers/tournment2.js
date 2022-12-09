@@ -590,26 +590,22 @@ module.exports.start = function(req, res, next) {
       switch (parseInt(entry.size))
       {
          case 4:
-          entry.current_round = 4;
+          entry.current_round = "_4";
           col = "_4";
           break;
 
          case 8 :
-          entry.current_round = 8;
+          entry.current_round = "_8";
           col = "_8";
           break;
 
          case 16:
-          entry.current_round = 16;
+          entry.current_round = "_16";
           col = "_16";
           break;
       }
 
-      tree = [];
-      for (var a=0;a<Math.ceil(entry.players / 2);a++)
-      {
-        tree[a] = [ entry.players[a * 2 ], entry.players[a * 2  + 1 ], ''];
-      }
+      
       entry.bouts = {
         '_2': [
           ['', '', ''],
@@ -636,6 +632,12 @@ module.exports.start = function(req, res, next) {
         ],
       };
       entry.bouts[col] = tree;
+
+      tree = [];
+      for (var a=0;a<Math.ceil(entry.players / 2);a++)
+      {
+        tree[a] = [ entry.players[a * 2 ], entry.players[a * 2  + 1 ], ''];
+      }
       //bouts: 
 
 
@@ -671,18 +673,18 @@ module.exports.winner = function(req, res, next) {
       //'_2'=final, '_4'=semi-final, '_8'=quarter-final, '_16'=round-of-16
       entry.bouts = req.body.winners.bouts;
       if (entry.current_round == "_2")
-      {
-        entry.status = "completed" ;
+      { 
+        //entry.status = "completed" ;
       }
       else if (entry.current_round == "_4")
       {
-        entry.current_round = "_2";
+        //entry.current_round = "_2";
         entry.bouts["_2"][0][0] = entry.bouts["_4"][0][2];
         entry.bouts["_2"][0][1] = entry.bouts["_4"][1][2];
       }
       else if (entry.current_round == "_8")
       {
-        entry.current_round = "_4";
+        //entry.current_round = "_4";
 
         entry.bouts["_4"][0][0] = entry.bouts["_8"][0][2];
         entry.bouts["_4"][0][1] = entry.bouts["_8"][1][2];
@@ -692,7 +694,7 @@ module.exports.winner = function(req, res, next) {
       }
       else if (entry.current_round == "_16")
       {
-        entry.current_round = "_8";
+       // entry.current_round = "_8";
 
         entry.bouts["_8"][0][0] = entry.bouts["_8"][0][2];
         entry.bouts["_8"][0][1] = entry.bouts["_8"][1][2];
@@ -734,11 +736,24 @@ module.exports.nextround = function(req, res, next) {
     {
       let entry = items[0];
             
-      if (entry.current_round == "final" )
-      {
+      if (entry.current_round == "_2")
+      { 
+        //entry.status = "completed" ;
         entry.champion = entry.bouts["_2"][0][2];
         entry.status = "completed";
         entry.save();
+      }
+      else if (entry.current_round == "_4")
+      {
+        entry.current_round = "_2";
+      }
+      else if (entry.current_round == "_8")
+      {
+        entry.current_round = "_4";
+      }
+      else if (entry.current_round == "_16")
+      {
+        entry.current_round = "_8";
       }
       
       

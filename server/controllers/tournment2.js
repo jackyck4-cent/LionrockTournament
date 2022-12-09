@@ -742,7 +742,7 @@ module.exports.nextround = function(req, res, next) {
         //entry.status = "completed" ;
         entry.champion = entry.bouts["_2"][0][2];
         entry.status = "completed";
-        entry.save();
+       
       }
       else if (entry.current_round == "_4")
       {
@@ -756,6 +756,7 @@ module.exports.nextround = function(req, res, next) {
       {
         entry.current_round = "_8";
       }
+      entry.save();
       
       
       res.json({ status: 1 , data :  entry });   

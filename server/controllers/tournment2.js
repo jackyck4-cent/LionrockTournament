@@ -635,15 +635,14 @@ module.exports.start = function(req, res, next) {
       
 
       
-      for (var a=0;a<Math.ceil(entry.players / 2);a++)
+      for (var a=0;a<Math.ceil(entry.players.length / 2);a++)
       {
         tree[a] = [ entry.players[a * 2 ], entry.players[a * 2  + 1 ], ''];
       }
       entry.bouts[col] = tree;
       //bouts: 
-
-
-      
+      console.log(entry.players)
+      console.log(tree);      
       entry.status = "started";
       entry.save();
       

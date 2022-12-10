@@ -17,7 +17,7 @@ let Tournament = mongoose.Schema(
         players: { type : Array , default : undefined , trim : true } ,             // registered players for the tournament
         current_round : { type : String , default : "" , trim : true  },
         champion: { type : String , default : "" , trim : true  }, 
-        bouts: { type : Object , default : undefined , trim : true }
+        bouts: { type : Object  }
         
     }, {
         collection: "tounaments",

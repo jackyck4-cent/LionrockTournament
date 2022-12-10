@@ -726,69 +726,59 @@ module.exports.nextround = function(req, res, next) {
     if ( items.length > 0 )
     {
       let entry = items[0];
+      var bouts = entry.bouts;
+      console.log(bouts)
+      entry.bouts = [];
 
       if (entry.current_round == "_2")
       { 
         //entry.status = "completed" ;
-        entry.champion = entry.bouts["_2"][0][2];
+        entry.champion = bouts["_2"][0][2];
         entry.status = "completed";
        
       }
       else if (entry.current_round == "_4")
       {
+        bouts["_2"][0][0] = bouts["_4"][0][2];
+        bouts["_2"][0][1] = bouts["_4"][1][2];
         entry.current_round = "_2";
       }
       else if (entry.current_round == "_8")
       {
+        //console.log(entry.bouts["_8"]);
+        
+        bouts["_4"][0][0] = bouts["_8"][0][2];
+        bouts["_4"][0][1] = bouts["_8"][1][2];
+        bouts["_4"][0][2] = "";
+
+        bouts["_4"][1][0] = bouts["_8"][2][2];
+        bouts["_4"][1][1] = bouts["_8"][3][2];
+        bouts["_4"][1][2] = "";
         entry.current_round = "_4";
       }
       else if (entry.current_round == "_16")
       {
+        bouts["_8"][0][0] = bouts["_8"][0][2];
+        bouts["_8"][0][1] = bouts["_8"][1][2];
+
+        bouts["_8"][1][0] = bouts["_8"][2][2];
+        bouts["_8"][1][1] = bouts["_8"][3][2];
+
+        bouts["_8"][2][0] = bouts["_8"][4][2];
+        bouts["_8"][2][1] = bouts["_8"][5][2];
+
+        bouts["_8"][3][0] = bouts["_8"][6][2];
+        bouts["_8"][3][1] = bouts["_8"][7][2];
         entry.current_round = "_8";
       }
-
-      if (entry.current_round == "_2")
-      { 
-        //entry.status = "completed" ;
-      }
-      else if (entry.current_round == "_4")
-      {
-        //entry.current_round = "_2";
-        entry.bouts["_2"][0][0] = entry.bouts["_4"][0][2];
-        entry.bouts["_2"][0][1] = entry.bouts["_4"][1][2];
-      }
-      else if (entry.current_round == "_8")
-      {
-        //entry.current_round = "_4";
-
-        entry.bouts["_4"][0][0] = entry.bouts["_8"][0][2];
-        entry.bouts["_4"][0][1] = entry.bouts["_8"][1][2];
-
-        entry.bouts["_4"][1][0] = entry.bouts["_8"][2][2];
-        entry.bouts["_4"][1][1] = entry.bouts["_8"][3][2];
-      }
-      else if (entry.current_round == "_16")
-      {
-       // entry.current_round = "_8";
-
-        entry.bouts["_8"][0][0] = entry.bouts["_8"][0][2];
-        entry.bouts["_8"][0][1] = entry.bouts["_8"][1][2];
-
-        entry.bouts["_8"][1][0] = entry.bouts["_8"][2][2];
-        entry.bouts["_8"][1][1] = entry.bouts["_8"][3][2];
-
-        entry.bouts["_8"][2][0] = entry.bouts["_8"][4][2];
-        entry.bouts["_8"][2][1] = entry.bouts["_8"][5][2];
-
-        entry.bouts["_8"][3][0] = entry.bouts["_8"][6][2];
-        entry.bouts["_8"][3][1] = entry.bouts["_8"][7][2];
-      }
-            
+    //  console.log(entry.bouts['_4'][0]);
+      entry.bouts = bouts
+      console.log(entry.bouts['_4'][0]);
       console.log("Current r="+entry.current_round);
       
       entry.save();
       
-      
+
       res.json({ status: 1 , data :  entry });   
     }
        

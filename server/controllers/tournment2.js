@@ -370,7 +370,18 @@ module.exports.fulllist = function(req, res, next) {
   userlist = {};
  
   let q = { status: { $ne: "removed" } };
+  let ok = 0;
+
   if (req.headers.authorization != null)
+  {
+    const token = req.headers.authorization.split(" ")[1];
+    if (token != "" && token != "null")
+      ok = 1
+  }
+  console.log(ok)
+
+
+  if (ok == 1)
   {
     const token = req.headers.authorization.split(" ")[1];
     let userinfo = jwt.verify(token, DB.Secret );
@@ -382,8 +393,7 @@ module.exports.fulllist = function(req, res, next) {
       $or : [
         {
           $and : [
-            { status: { $ne: "draft" } },
-            { status: { $ne: "removed" } },
+            { status: "draft" },           
             { owner_id: mongoose.Types.ObjectId(userinfo.userId) },
           ],
         }, 

@@ -390,7 +390,7 @@ module.exports.fulllist = function(req, res, next) {
   let regcheck = 0;
   for (var i=0;i<filter.length;i++)
   {
-    filter[i] == "latest" ? latest = 1 : "";
+    filter[i] == "latest" ? (filter.length==1)? latest = 1 : "" : "";
     filter[i] == "all" || filter[i] == "registered" ? all = 1 : "";
 
     if (filter[i] == "registered")

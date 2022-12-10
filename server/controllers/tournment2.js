@@ -730,6 +730,26 @@ module.exports.nextround = function(req, res, next) {
       if (entry.current_round == "_2")
       { 
         //entry.status = "completed" ;
+        entry.champion = entry.bouts["_2"][0][2];
+        entry.status = "completed";
+       
+      }
+      else if (entry.current_round == "_4")
+      {
+        entry.current_round = "_2";
+      }
+      else if (entry.current_round == "_8")
+      {
+        entry.current_round = "_4";
+      }
+      else if (entry.current_round == "_16")
+      {
+        entry.current_round = "_8";
+      }
+
+      if (entry.current_round == "_2")
+      { 
+        //entry.status = "completed" ;
       }
       else if (entry.current_round == "_4")
       {
@@ -765,25 +785,7 @@ module.exports.nextround = function(req, res, next) {
       }
             
       console.log("Current r="+entry.current_round);
-      if (entry.current_round == "_2")
-      { 
-        //entry.status = "completed" ;
-        entry.champion = entry.bouts["_2"][0][2];
-        entry.status = "completed";
-       
-      }
-      else if (entry.current_round == "_4")
-      {
-        entry.current_round = "_2";
-      }
-      else if (entry.current_round == "_8")
-      {
-        entry.current_round = "_4";
-      }
-      else if (entry.current_round == "_16")
-      {
-        entry.current_round = "_8";
-      }
+      
       entry.save();
       
       

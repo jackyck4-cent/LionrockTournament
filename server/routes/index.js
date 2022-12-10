@@ -18,6 +18,7 @@ function reqAuth(req, res, next)
 router.get('/', indexController.home );
 
 /* First release listing page */
+/*
 router.get('/tournment', reqAuth , indexController.tournment );
 
 router.get('/profile', reqAuth , indexController.profile );
@@ -26,8 +27,8 @@ router.get('/profile', reqAuth , indexController.profile );
 router.get('/member', indexController.member );
 
 router.get('/logout', userController.logout);
-
-router.get('*', indexController.home );
+*/
+//router.get('*', indexController.home );
 
 module.exports = router;
  

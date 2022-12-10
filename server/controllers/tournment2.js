@@ -368,8 +368,49 @@ module.exports.info = function(req, res, next) {
 module.exports.fulllist = function(req, res, next) {
   items = {}
   userlist = {};
+ 
+  let q = { status: { $ne: "removed" } };
+  if (req.headers.authorization != null)
+  {
+    const token = req.headers.authorization.split(" ")[1];
+    let userinfo = jwt.verify(token, DB.Secret );
 
-  User.find().then( ( users ) => {
+    //userId
+    console.log(userinfo);
+    
+    q = {
+      $or : [
+        {
+          $and : [
+            { status: { $ne: "draft" } },
+            { status: { $ne: "removed" } },
+            { owner_id: mongoose.Types.ObjectId(userinfo.userId) },
+          ],
+        }, 
+               
+        { status : 'enrolling' },
+        { status : 'started' },
+        { status : 'completed' },
+      ]
+    }
+
+    
+  }
+  else
+  {
+    q = {
+      $or : [
+        
+               
+        { status : 'enrolling' },
+        { status : 'started' },
+        { status : 'completed' },
+      ]
+    }
+  }
+
+
+  User.find(  ).sort("name").then( ( users ) => {
     players = {};
     for (var a=0;a<users.length;a++)
     {
@@ -386,7 +427,7 @@ module.exports.fulllist = function(req, res, next) {
     items.players = players;
 
     Tournament.find(
-      { status: { $ne: "removed" } }
+      q
     ).sort({name:1}).then( ( games ) => {
 
       tournaments = {};

@@ -8,8 +8,10 @@ let DB = require("../config/db")
 let Tournament = require("../models/tournament");
 let Player = require("../models/player");
 let userModel = require("../models/user");
+let joinModel = require("../models/joined");
 const e = require('express');
-let User = userModel.User
+let User = userModel.User;
+let Joined = joinModel.Joined;
 /*
 module.exports.add = function(req, res, next) {
 
@@ -378,31 +380,91 @@ module.exports.fulllist = function(req, res, next) {
     if (token != "" && token != "null")
       ok = 1
   }
-  console.log(ok)
+  
+  let filter = [];
 
+  if (req.query.filters != null)
+    filter = req.query.filters.split(',');
+  let latest = 0;
+  let all = 0;
+  for (var i=0;i<filter.length;i++)
+  {
+    filter[i] == "latest" ? latest = 1 : "";
+    filter[i] == "all" ? all = 1 : "";
 
-  if (ok == 1)
+  }
+
+  if (all == 1)
+  {
+    filter = ['registered','enrolling','started','completed','draft'];
+  }
+
+  if (ok == 1 && latest == 0 && filter.length > 0)
   {
     const token = req.headers.authorization.split(" ")[1];
     let userinfo = jwt.verify(token, DB.Secret );
 
     //userId
-    console.log(userinfo);
-    
-    q = {
-      $or : [
-        {
-          $and : [
-            { status: "draft" },           
-            { owner_id: mongoose.Types.ObjectId(userinfo.userId) },
-          ],
-        }, 
-               
-        { status : 'enrolling' },
-        { status : 'started' },
-        { status : 'completed' },
-      ]
+    //console.log(userinfo);
+    let qarray = [];
+    let owned = 0;
+
+    console.log(filter)
+    for (var i=0;i<filter.length;i++)
+    {
+      switch (filter[i])
+      {
+        case "started":
+          qarray.push({ status : 'started' });
+          break;
+
+        case "completed":
+          qarray.push({ status : 'completed' });
+          break;
+
+        case "draft" :
+          qarray.push({
+            $and : [
+              { status: "draft" },           
+              { owner_id: mongoose.Types.ObjectId(userinfo.userId) },
+            ],
+          });
+          break;
+
+        case "enrolling" : case "registered":
+            qarray.push({ status : 'enrolling' });
+            break;
+
+        case "owned" :
+            //qarray.push();
+            qarray.push({ status : 'enrolling' });
+            qarray.push({ status : 'draft' });
+            qarray.push({ status : 'completed' });
+            qarray.push({ status : 'started' });
+            owned = 1;
+            break;
+
+        
+      }
     }
+    
+
+    if (owned == 1 )
+    {
+      q = {
+        $or : qarray,
+        $end : [
+          {owner_id: mongoose.Types.ObjectId(userinfo.userId)}
+        ]
+      }
+    }
+    else
+    {
+      q = {
+        $or : qarray
+      }
+    }
+    console.log(q)
 
     
   }
@@ -450,7 +512,7 @@ module.exports.fulllist = function(req, res, next) {
       }
       items.tournaments = tournaments;
 
-      res.json({ status: 1 , 'data' : items });       
+      res.json({ status: 1 , 'data' : items , q : q});       
   });
 
    
@@ -723,8 +785,18 @@ module.exports.start = function(req, res, next) {
       console.log(tree);      
       entry.status = "started";
       entry.save();
-      
-      
+      /*
+      for (var a=0;a<Math.ceil(entry.players.length);a++)
+      {
+
+        let newEntry = new Joined({
+          tn_id: req.body.name,
+          playername : entry.players[a],
+        
+        });
+        Joined.create(newEntry, (err, resultdata) => {});     
+      }
+      */
       
       res.json({ status: 1 , data :  entry });   
     }

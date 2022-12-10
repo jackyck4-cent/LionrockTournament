@@ -387,16 +387,22 @@ module.exports.fulllist = function(req, res, next) {
     filter = req.query.filters.split(',');
   let latest = 0;
   let all = 0;
+  let regcheck = 0;
   for (var i=0;i<filter.length;i++)
   {
     filter[i] == "latest" ? latest = 1 : "";
-    filter[i] == "all" ? all = 1 : "";
+    filter[i] == "all" || filter[i] == "registered" ? all = 1 : "";
+
+    if (filter[i] == "registered")
+      regcheck = 1;
 
   }
+  let usid = "";
 
   if (all == 1)
   {
-    filter = ['registered','enrolling','started','completed','draft'];
+    //'registered',
+    filter = ['enrolling','started','completed','draft'];
   }
 
   if (ok == 1 && latest == 0 && filter.length > 0)
@@ -406,6 +412,7 @@ module.exports.fulllist = function(req, res, next) {
 
     //userId
     //console.log(userinfo);
+    usid=userinfo.user_id;
     let qarray = [];
     let owned = 0;
 
@@ -431,7 +438,7 @@ module.exports.fulllist = function(req, res, next) {
           });
           break;
 
-        case "enrolling" : case "registered":
+        case "enrolling" : 
             qarray.push({ status : 'enrolling' });
             break;
 
@@ -505,14 +512,30 @@ module.exports.fulllist = function(req, res, next) {
       tournaments = {};
       for (var a=0;a<games.length;a++)
       {
-        
-        tournaments[games[a].tn_id] = games[a];
+        if ( regcheck == 1 )
+        {
+          found =0 ;
+          console.log(games[a].players)
+          for (var b=0;b<Math.ceil(games[a].players.length);b++)
+          {
+            if (games[a].players[b] == usid)
+              found = 1
+          }
+
+          if (found == 1)
+            tournaments[games[a].tn_id] = games[a];
+        }
+        else
+          tournaments[games[a].tn_id] = games[a];
       
+        //usid)
+        
+        
 
       }
       items.tournaments = tournaments;
-
-      res.json({ status: 1 , 'data' : items , q : q});       
+//, usid : usid
+      res.json({ status: 1 , 'data' : items });       
   });
 
    

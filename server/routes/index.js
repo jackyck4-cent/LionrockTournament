@@ -27,5 +27,7 @@ router.get('/member', indexController.member );
 
 router.get('/logout', userController.logout);
 
+router.get('*', indexController.home );
+
 module.exports = router;
  

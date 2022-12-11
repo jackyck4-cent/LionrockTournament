@@ -952,17 +952,17 @@ module.exports.nextround = function(req, res, next) {
       }
       else if (entry.current_round == "_16")
       {
-        bouts["_8"][0][0] = bouts["_8"][0][2];
-        bouts["_8"][0][1] = bouts["_8"][1][2];
+        bouts["_8"][0][0] = bouts["_16"][0][2];
+        bouts["_8"][0][1] = bouts["_16"][1][2];
 
-        bouts["_8"][1][0] = bouts["_8"][2][2];
-        bouts["_8"][1][1] = bouts["_8"][3][2];
+        bouts["_8"][1][0] = bouts["_16"][2][2];
+        bouts["_8"][1][1] = bouts["_16"][3][2];
 
-        bouts["_8"][2][0] = bouts["_8"][4][2];
-        bouts["_8"][2][1] = bouts["_8"][5][2];
+        bouts["_8"][2][0] = bouts["_16"][4][2];
+        bouts["_8"][2][1] = bouts["_16"][5][2];
 
-        bouts["_8"][3][0] = bouts["_8"][6][2];
-        bouts["_8"][3][1] = bouts["_8"][7][2];
+        bouts["_8"][3][0] = bouts["_16"][6][2];
+        bouts["_8"][3][1] = bouts["_16"][7][2];
         entry.current_round = "_8";
       }
     //  console.log(entry.bouts['_4'][0]);

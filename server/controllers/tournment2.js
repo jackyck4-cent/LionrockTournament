@@ -522,7 +522,9 @@ module.exports.fulllist = function(req, res, next) {
     }
     else
     {
-      q = filterall
+      q =  {
+        $or : filterall
+      }
     }
 
     

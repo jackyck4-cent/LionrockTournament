@@ -477,6 +477,8 @@ module.exports.fulllist = function(req, res, next) {
   }
   else
   {
+    filterall = ['enrolling','started','completed'];
+    /*
     q = {
       $or : [
         
@@ -486,6 +488,44 @@ module.exports.fulllist = function(req, res, next) {
         { status : 'completed' },
       ]
     }
+*/
+    let qarray = [];
+    let owned = 0;
+
+    for (var i=0;i<filter.length;i++)
+    {
+      switch (filter[i])
+      {
+        case "started":
+          qarray.push({ status : 'started' });
+          break;
+
+        case "completed":
+          qarray.push({ status : 'completed' });
+          break;
+
+        
+
+        case "enrolling" : 
+            qarray.push({ status : 'enrolling' });
+            break;
+
+        
+      }
+    }
+
+    if (qarray.length > 0 )
+    {
+      q = {
+        $or : qarray
+      }
+    }
+    else
+    {
+      q = filterall
+    }
+
+    
   }
 
 

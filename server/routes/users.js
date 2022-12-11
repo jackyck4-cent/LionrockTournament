@@ -15,5 +15,6 @@ router.post('/login', userController.login);
 
 
 router.get('/me', passport.authenticate('jwt', {session: false}) ,  userController.me);
+router.post('/change', passport.authenticate('jwt', {session: false}) ,  userController.change);
 
 module.exports = router;

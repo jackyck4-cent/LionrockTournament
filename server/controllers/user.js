@@ -126,9 +126,60 @@ module.exports.me = function(req, res, next) {
     //console.log(token);
     let userinfo = jwt.verify(token, DB.Secret );
 
+    User.find({
+      'reference' : userinfo.user_id
+  } ).then( ( items ) => {
+
+    userinfo = {}
+    if (items.length > 0 )
+    {
+      userinfo = {
+        "username":items[0].username,
+        "display_name":items[0].display_name,
+        "email":items[0].email,
+        "userId":items[0]._id,
+        "user_id":items[0].reference,
+        "role":items[0].role
+        
+      };
+    }
+
     return res.status(200).json({
+      status : 1,
+      
+      info : userinfo
+    })
+  })
+
+    
+}
+
+module.exports.change = function(req, res, next) {
+  const token = req.headers.authorization.split(" ")[1];
+
+  //console.log(token);
+  let userinfo = jwt.verify(token, DB.Secret );
+
+  User.find({
+      'reference' : userinfo.user_id
+  } ).then( ( items ) => {
+    
+   
+    if ( items.length > 0 )
+    {
+
+      let entry = items[0];
+      entry.display_name = req.body.display_name
+      entry.email = req.body.email;
+      entry.save();
+
+      return res.status(200).json({
         status : 1,
-       
-        info : userinfo
+      
+        info : entry
       })
+    }
+  })
+
+ 
 }

@@ -522,8 +522,14 @@ module.exports.fulllist = function(req, res, next) {
     }
     else
     {
-      q =  {
-        $or : filterall
+      q = {
+        $or : [
+          
+                 
+          { status : 'enrolling' },
+          { status : 'started' },
+          { status : 'completed' },
+        ]
       }
     }
 

@@ -15,8 +15,13 @@ function reqAuth(req, res, next)
 }
 
 /* GET home page. */
-router.get('/', indexController.home );
-
+router.get('/webapp/*', indexController.home );
+router.get('/webapp/', indexController.home );
+router.get('/', (req, res) => {
+  // The optional first parameter to `res.redirect()` is a numeric
+  // HTTP status.
+  res.redirect(301, '/webapp/');
+} );
 /* First release listing page */
 /*
 router.get('/tournment', reqAuth , indexController.tournment );
